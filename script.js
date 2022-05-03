@@ -11,7 +11,6 @@ const dot = document.querySelector('.point');
 const equal = document.querySelector('.equality');
 
 const clickedNumber = document.querySelectorAll('[data-number]');
-const operations = document.querySelectorAll('[data-operation]');
 
 // display user input
 const display = document.getElementById('currentInput');
@@ -25,9 +24,10 @@ keys.addEventListener('click', e => {
     const action = key.dataset.action;
     const keyContent = key.textContent;
     const displayedNum = display.textContent;
+    const previousKeyType = calculator.dataset.previousKeyType;
     
     if(!action) {
-      if(displayedNum == '0') {
+      if(displayedNum == '0' || previousKeyType == 'operator') {
         display.textContent = keyContent;
       } else {
         display.textContent = displayedNum + keyContent;
@@ -35,15 +35,17 @@ keys.addEventListener('click', e => {
     }
     
     if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide' || action === 'modulus') {
-      console.log('operation key!')
+      key.classList.add('is-depressed');
+      // add custom attribute
+      calculator.dataset.previousKeyType = 'operator';
     }
 
     if(action === 'decimal') {
-      console.log('decimal key!')
+      display.textContent = displayedNum + '.';
     }
     
     if(action === 'delete') {
-      console.log('delete key!')
+      console.log('delete key!');
     }
 
     if(action === 'clear') {
@@ -53,6 +55,8 @@ keys.addEventListener('click', e => {
     if(action === 'calculate') {
       console.log('equal key!')
     }
+
+    Array.from(key.parentNode.children).forEach(k => k.classList.remove('is-depressed'))
   }
 });
 
