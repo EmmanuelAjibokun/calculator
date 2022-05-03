@@ -17,37 +17,37 @@
     <div class="inputField">
 
       <div class="row">
-        <button class="ac">AC</button>
-        <button class="del">DEL</button>
-        <button class="modulus">%</button>
-        <button data-operation class="divide">/</button>
+        <button class="ac" data-action="clear">AC</button>
+        <button class="del" data-action="delete">DEL</button>
+        <button class="modulus" data-action="modulus">%</button>
+        <button data-action="divide" class="divide">/</button>
       </div>
       
       <div class="row">
         <button data-number="7" class="number">7</button>
         <button data-number="8" class="number">8</button>
         <button data-number="9" class="number">9</button>
-        <button data-operation class="multiply">*</button>
+        <button data-action="multiply" class="multiply">*</button>
       </div>
       
       <div class="row">
         <button data-number="4" class="number">4</button>
         <button data-number="5" class="number">5</button>
         <button data-number="6" class="number">6</button>
-        <button data-operation class="subtract">-</button>
+        <button data-action="subtract" class="subtract">-</button>
       </div>
       
       <div class="row">
         <button data-number="1" class="number">1</button>
         <button data-number="2" class="number">2</button>
         <button data-number="3" class="number">3</button>
-        <button data-operation class="add">+</button>
+        <button data-action="add" class="add">+</button>
       </div>
       
       <div class="last-row">
         <button data-number="0" class="number">0</button>
-        <button data-operation class="point" style="font-size: 30px; line-height: 30px">.</button>
-        <button data-equals class="equality">=</button>
+        <button data-action="decimal" class="point" style="font-size: 30px; line-height: 30px">.</button>
+        <button data-action="calculate" class="equality">=</button>
       </div>
 
     </div>

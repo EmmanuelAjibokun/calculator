@@ -22,6 +22,32 @@ outputCurrentInput.textContent = 0;
 
 keys.addEventListener('click', e => {
   if (e.target.matches('button')) {
+    const key = e.target;
+    const action = key.dataset.action;
     
+    if(!action) {
+      console.log('number key!')
+    }
+    
+    if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide' || action === 'modulus') {
+      console.log('operation key!')
+    }
+
+    if(action === 'decimal') {
+      console.log('decimal key!')
+    }
+    
+    if(action === 'delete') {
+      console.log('delete key!')
+    }
+
+    if(action === 'clear') {
+      console.log('clear key!')
+    }
+    
+    if(action === 'calculate') {
+      console.log('equal key!')
+    }
   }
-})
+});
+
