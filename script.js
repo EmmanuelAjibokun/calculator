@@ -14,9 +14,8 @@ const clickedNumber = document.querySelectorAll('[data-number]');
 const operations = document.querySelectorAll('[data-operation]');
 
 // display user input
-const outputPreviousInput = document.getElementById('previousInput');
-const outputCurrentInput = document.getElementById('currentInput');
-outputCurrentInput.textContent = 0;
+const display = document.getElementById('currentInput');
+display.textContent = 0;
 
 // listen for all keys pressed
 
@@ -24,9 +23,15 @@ keys.addEventListener('click', e => {
   if (e.target.matches('button')) {
     const key = e.target;
     const action = key.dataset.action;
+    const keyContent = key.textContent;
+    const displayedNum = display.textContent;
     
     if(!action) {
-      console.log('number key!')
+      if(displayedNum == '0') {
+        display.textContent = keyContent;
+      } else {
+        display.textContent = displayedNum + keyContent;
+      }
     }
     
     if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide' || action === 'modulus') {
