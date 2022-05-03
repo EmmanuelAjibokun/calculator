@@ -1,4 +1,5 @@
-
+const calculator = document.querySelector('.calculator');
+const keys = document.querySelector('.inputField');
 const allClear = document.querySelector('.ac');
 const memoryclear = document.querySelector('.mc');
 const modulus = document.querySelector('.modulus');
@@ -17,4 +18,10 @@ const outputPreviousInput = document.getElementById('previousInput');
 const outputCurrentInput = document.getElementById('currentInput');
 outputCurrentInput.textContent = 0;
 
-// calculator class takes all calculator's function
+// listen for all keys pressed
+
+keys.addEventListener('click', e => {
+  if (e.target.matches('button')) {
+    
+  }
+})
