@@ -1,6 +1,6 @@
 const calculator = document.querySelector('.calculator');
 const keys = document.querySelector('.inputField');
-const allClear = document.querySelector('.ac');
+/* const allClear = document.querySelector('.ac');
 const memoryclear = document.querySelector('.mc');
 const modulus = document.querySelector('.modulus');
 const divide = document.querySelector('.divide');
@@ -8,9 +8,9 @@ const multiply = document.querySelector('.multiply');
 const subtract = document.querySelector('.subtract');
 const add = document.querySelector('.add');
 const dot = document.querySelector('.point');
-const equal = document.querySelector('.equality');
+const equal = document.querySelector('.equality'); */
 
-const clickedNumber = document.querySelectorAll('[data-number]');
+// const clickedNumber = document.querySelectorAll('[data-number]');
 
 // display user input
 const display = document.getElementById('currentInput');
@@ -73,7 +73,16 @@ keys.addEventListener('click', e => {
     }
 
     if(action === 'clear') {
-      console.log('clear key!')
+      if (key.textContent === 'AC') {
+        calculator.dataset.firstValue = '';
+        calculator.dataset.previousKeyType = '';
+        calculator.dataset.modValue = '';
+        calculator.dataset.operator = '';
+      } else {
+        key.textContent = 'AC'
+      }
+
+      display.textContent = 0;
       calculator.dataset.previousKeyType = 'clear'
     }
     
