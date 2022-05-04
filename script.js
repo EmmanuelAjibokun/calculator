@@ -37,10 +37,24 @@ keys.addEventListener('click', e => {
     }
     
     if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide' || action === 'modulus') {
+      const firstValue = calculator.dataset.firstValue;
+      const operator = calculator.dataset.operator;
+      const secondValue = displayedNum;
+
+      if (firstValue && operator && previousKeyType !== 'operator' && previousKeyType !== 'calculate') {
+        const calcValue = calculate(firstValue, operator, secondValue);
+        display.textContent = calcValue;
+
+        //update calculated value as first value
+        calculator.dataset.firstValue = calcValue;
+      } else {
+        // if they are no calculations, set displayedNum as the firstValue
+        calculator.dataset.firstValue = displayedNum;
+      }
+
       key.classList.add('is-depressed');
       // add custom attribute
       calculator.dataset.previousKeyType = 'operator';
-      calculator.dataset.firstValue = displayedNum;
       calculator.dataset.operator = action;
     }
 
@@ -68,8 +82,9 @@ keys.addEventListener('click', e => {
       const operator = calculator.dataset.operator;
       const secondValue = displayedNum;
 
+      if (firstValue) {
       display.textContent = calculate(firstValue, operator, secondValue);
-      
+      }
       calculator.dataset.previousKeyType = 'calculate';
     }
 
