@@ -1,69 +1,140 @@
+function calculate(n1, operator, n2) {
+  const firstNum = parseFloat(n1);
+  const secondNum = parseFloat(n2);
 
-const allClear = document.querySelector('.ac');
-const memoryclear = document.querySelector('.mc');
-const modulus = document.querySelector('.modulus');
-const divide = document.querySelector('.divide');
-const multiply = document.querySelector('.multiply');
-const subtract = document.querySelector('.subtract');
-const add = document.querySelector('.add');
-const dot = document.querySelector('.point');
-const equal = document.querySelector('.equality');
+  if (operator === 'add') return firstNum + secondNum;
+  if (operator === 'subtract') return firstNum - secondNum;
+  if (operator === 'multiply') return firstNum * secondNum;
+  if (operator === 'divide') return firstNum / secondNum;
+  if (operator === 'modulus') return firstNum % secondNum;
+}
 
-const clickedNumber = document.querySelectorAll('[data-number]');
-const operations = document.querySelectorAll('[data-operation]');
+const getKeyType = key => {
+  const { action } = key.dataset;
+  if (!action) return 'number'
+  if (action === 'add' ||
+  action === 'subtract' ||
+  action === 'multiply' ||
+  action === 'divide' ||
+  action === 'modulus'
+  ) return 'operator'
+  // for everthing else, return the action
+  return action
+}
+
+const calculator = document.querySelector('.calculator');
+const keys = document.querySelector('.inputField');
 
 // display user input
-const outputPreviousInput = document.getElementById('previousInput');
-const outputCurrentInput = document.getElementById('currentInput');
-outputCurrentInput.textContent = 0;
+const display = document.getElementById('currentInput');
+display.textContent = 0;
 
-// calculator class takes all calculator's function
-class Calculator {
-  constructor(outputPreviousInput, outputCurrentInput) {
-    this.outputPreviousInput = outputPreviousInput;
-    this.outputCurrentInput = outputCurrentInput;
-    this.clear();
+const creatResultString = (key, displayedNum, state) => {
+  const keyContent = key.textContent;
+  const keyType = getKeyType(key)
+  const {
+    firstValue,
+    operator,
+    modValue,
+    previousKeyType
+  } = state
+
+  if(keyType === 'number') {
+    return displayedNum === '0' || previousKeyType === 'operator' || previousKeyType === 'calculate'
+    ? keyContent
+    : displayedNum + keyContent
+  }
+
+  if(keyType === 'decimal') {
+    if (!displayedNum.includes('.')) return displayedNum + '.'
+    if (previousKeyType === 'operator' || previousKeyType === 'calculate') return '0.';
+    return displayedNum;
+  }
+
+  if (keyType === 'operator') {
+    return firstValue && operator && previousKeyType !== 'operator' && previousKeyType !== 'calculate'
+      ? calculate(firstValue, operator, displayedNum)
+      : displayedNum
+  }
+
+  if(keyType === 'clear') return 0
+
+  if (keyType === 'delete') return displayedNum.slice(0, -1)
+
+  if(keyType === 'calculate') {
+    return firstValue
+      ? previousKeyType === 'calculate'
+        ? calculate(displayedNum, operator, modValue)
+        : calculate(firstValue, operator, displayedNum)
+      : displayedNum
   }
 }
 
+const updateCalculatorState = (key, calculator, calculatedValue, displayedNum) => {
+  const keyType = getKeyType(key);
+  const {
+    firstValue,
+    operator,
+    modValue,
+    previousKeyType
+  } = calculator.dataset;
 
-// clear function
-clear() {
-  this.currentOperand = '';
-  this.previousOperand = '';
-  this.operation = undefined;
+  calculator.dataset.previousKeyType = keyType;
+
+  if (keyType === 'operator') {
+    calculator.dataset.operator = key.dataset.action;
+    calculator.dataset.firstValue = firstValue &&
+    operator &&
+    previousKeyType !== 'operator' &&
+    previousKeyType !== 'calculate'
+    ? calculatedValue
+    : displayedNum
+  }
+
+  if (keyType === 'clear' && key.textContent === 'AC') {
+    calculator.dataset.firstValue = '';
+    calculator.dataset.previousKeyType = '';
+    calculator.dataset.modValue = '';
+    calculator.dataset.operator = '';
+    display.textContent = 0;
+  }
+
+  if(keyType === 'delete') {
+    console.log('delete key!');
+  }
+
+  if (keyType === 'calculate') {
+    calculator.dataset.modValue = firstValue && previousKeyType === 'calculate'
+    ? modValue
+    : displayedNum
+  }
 }
 
-// making hooked varaibles operate on calculator object
-const calculator = new Calculator(outputPreviousInput, outputCurrentInput);
+const updateVisualState = (key, calculator) => {
+  const keyType = getKeyType(key)
 
-// get users input or appendNumber
-let userInput = clickedNumber;
-clickedNumber.forEach(button => {
-  button.addEventListener('click', () => {
-//    outputCurrentInput.textContent = button.innerText;
-    calculator.appendNumber(button.innerText);
-    calculator.updateDisplay(this.outputCurrentInput.innerText = currentOperand);
-  })
+  Array.from(key.parentNode.children).forEach(k => k.classList.remove('is-depressed'))
+
+  if (keyType === 'operator') key.classList.add('is-depressed')
+
+  if (keyType === 'clear' && key.textContent !== 'AC') key.textContent = 'AC'
+
+  if (keyType === 'delete') {
+    const deleteButton = calculator.querySelector('[data-action=delete]')
+    deleteButton.textContent = 'DEL'
+  }
+}
+// listen for all keys pressed
+keys.addEventListener('click', e => {
+  if (!e.target.matches('button')) return
+    const key = e.target;
+    const displayedNum = display.textContent;
+
+    // pure function
+    const resultString = creatResultString(key, displayedNum, calculator.dataset);
+
+    // Update states
+    display.textContent = resultString;
+    updateCalculatorState(key, calculator, resultString, displayedNum);
+    updateVisualState(key, calculator);
 });
-
-// appendNumber function
-appendNumber(number) {
-  if (number === '.' && this.currentOperand.includes('.')) return this.currentOperand = this.currentOperand.toString() + number.toString()
-}
-
-// operators function
-operation.forEach(button => {
-  button.addEventListener('click', () => {
-    calculator.chooseOperation(button.innerText);
-    calculator.updateDisplay();
-  })
-})
-
-// add numbers
-/*
-function add() {
-  let answer = userInput + userInput;
-  return answer
-}
-*/
